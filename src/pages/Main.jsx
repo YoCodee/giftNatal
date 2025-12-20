@@ -273,9 +273,9 @@ const Main = () => {
     musicVolume: { value: 0.4, min: 0, max: 1, step: 0.05, label: "Music Volume" },
     selectedMap: {
       options: {
-        "Christmas Room": "/models/MapNatalFinalAsiap1.glb",
+        "Christmas Room": "/models/NatalMapAsiapSantuy.glb",
       },
-      value: "/models/MapNatalFinalAsiap1.glb",
+      value: "/models/NatalMapAsiapSantuy.glb",
       label: "Map Selection",
     },
   });
@@ -325,20 +325,20 @@ const Main = () => {
     }
   };
 
-  if (isMobile) {
-    return (
-      <div className="fixed inset-0 bg-black z-[99999] flex flex-col items-center justify-center text-white p-8 text-center">
-         <div className="text-6xl mb-4">🎄</div>
-         <h1 className="text-3xl font-serif font-bold text-red-500 mb-4">Maaf, Belum Tersedia</h1>
-         <p className="text-gray-300 max-w-md leading-relaxed">
-           Pengalaman Web 3D ini membutuhkan keyboard dan mouse serta layar yang lebih besar untuk pengalaman terbaik.
-         </p>
-         <p className="mt-4 text-yellow-500 font-bold">
-            Silakan buka kembali di Laptop atau PC Desktop.
-         </p>
-      </div>
-    );
-  }
+  // if (isMobile) {
+  //   return (
+  //     <div className="fixed inset-0 bg-black z-[99999] flex flex-col items-center justify-center text-white p-8 text-center">
+  //        <div className="text-6xl mb-4">🎄</div>
+  //        <h1 className="text-3xl font-serif font-bold text-red-500 mb-4">Maaf, Belum Tersedia</h1>
+  //        <p className="text-gray-300 max-w-md leading-relaxed">
+  //          Pengalaman Web 3D ini membutuhkan keyboard dan mouse serta layar yang lebih besar untuk pengalaman terbaik.
+  //        </p>
+  //        <p className="mt-4 text-yellow-500 font-bold">
+  //           Silakan buka kembali di Laptop atau PC Desktop.
+  //        </p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="h-screen w-full bg-black ">

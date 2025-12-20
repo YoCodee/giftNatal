@@ -164,7 +164,7 @@ const CinematicCamera = ({ onFinaleFinished, onShowBook, userName, onCanExit }) 
     }),
     "Finale Text 2": folder({
       text2Position: { value: [35.1, 0, 11.1], step: 0.1, label: "Position" },
-      text2Content: { value: `Selamat Natal dan Tahun Baru 2025\nTuhan Yesus Berkati..`, label: "Content", rows: 2 },
+      text2Content: { value: `Selamat Natal dan Tahun Baru 2026\nTuhan Yesus Berkati..`, label: "Content", rows: 2 },
       text2FontSize: { value: 1.5, min: 0.1, max: 10, step: 0.1, label: "Size" },
       text2Color: { value: "#ffffff", label: "Color" },
     }),
