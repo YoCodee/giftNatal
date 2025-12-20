@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+
+.reveal-container {
+  font-family: "Montserrat Medium";
+  max-width: 40ch;
+  text-align: center;
+  transform: scale(0.94);
+  animation: scale 3s forwards cubic-bezier(0.5, 1, 0.89, 1);
+}
+
+@keyframes scale {
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Fade-in word-by-word */
+.fade-in {
+  opacity: 0;
+  filter: blur(4px);
+  animation: fadeInWord 0.8s forwards cubic-bezier(0.11, 0, 0.5, 0);
+}
+
+@keyframes fadeInWord {
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Fade-out word-by-word (reverse) */
+.fade-out {
+  opacity: 1;
+  filter: blur(0);
+  animation: fadeOutWord 0.8s forwards cubic-bezier(0.5, 0, 0.11, 1);
+}
+
+@keyframes fadeOutWord {
+  100% {
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
