@@ -9,7 +9,7 @@ export function ChristmasRoom({
   onSignpostReady,
   onBattlepostReady,
   onInteractablesReady,
-  modelPath = "/models/MapNatalFinalAsiap1.glb",
+  modelPath = "/models/Lekkuterakhir1.glb",
 }) {
   const gltf = useGLTF(modelPath);
   const scene = gltf.scene;
@@ -429,5 +429,5 @@ function StageSpotlight({
   );
 }
 
-useGLTF.preload("/models/MapNatalFinalAsiap1.glb");
+useGLTF.preload("/models/Lekkuterakhir1.glb");
 export default ChristmasRoom;

@@ -1,7 +1,7 @@
 import React, { Suspense, useRef, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useLocation } from "react-router-dom";
-import { useProgress, Html, KeyboardControls } from "@react-three/drei";
+import { useProgress, Html, KeyboardControls, Stats } from "@react-three/drei";
 import ChristmasRoom from "../components/Three/ChristmasRoom";
 import Sky from "../components/sky/Sky";
 import Crosshair from "../components/Crosshair";
@@ -262,7 +262,6 @@ const Main = () => {
     viewerFov,
     overlayCanvasWidthPct,
     overlayCanvasHeightPct,
-    musicVolume,
     selectedMap,
   } = useControls("Settings", {
     viewerTargetSize: { value: 5, min: 0.1, max: 5, step: 0.05, folder: "3D Overlay" },
@@ -270,24 +269,27 @@ const Main = () => {
     viewerFov: { value: 120, min: 10, max: 120, step: 1, folder: "3D Overlay" },
     overlayCanvasWidthPct: { value: 100, min: 20, max: 100, step: 1, folder: "3D Overlay" },
     overlayCanvasHeightPct: { value: 100, min: 20, max: 100, step: 1, folder: "3D Overlay" },
-    musicVolume: { value: 0.4, min: 0, max: 1, step: 0.05, label: "Music Volume" },
     selectedMap: {
       options: {
-        "Christmas Room": "/models/NatalMapAsiapSantuy.glb",
+        "Christmas Room": "/models/Lekkuterakhir1.glb",
       },
-      value: "/models/NatalMapAsiapSantuy.glb",
+      value: "/models/Lekkuterakhir1.glb",
       label: "Map Selection",
     },
   });
 
+  const [volume, setVolume] = useState(0.4);
+  const [isMuted, setIsMuted] = useState(false);
+
   React.useEffect(() => {
+    const effectiveVolume = isMuted ? 0 : volume;
     if (audioRef.current) {
-      audioRef.current.volume = musicVolume;
+      audioRef.current.volume = effectiveVolume;
     }
     if (cinematicAudioRef.current) {
-      cinematicAudioRef.current.volume = musicVolume;
+      cinematicAudioRef.current.volume = effectiveVolume;
     }
-  }, [musicVolume]);
+  }, [volume, isMuted]);
 
   React.useEffect(() => {
     if (cinematicMode) {
@@ -325,20 +327,20 @@ const Main = () => {
     }
   };
 
-  // if (isMobile) {
-  //   return (
-  //     <div className="fixed inset-0 bg-black z-[99999] flex flex-col items-center justify-center text-white p-8 text-center">
-  //        <div className="text-6xl mb-4">🎄</div>
-  //        <h1 className="text-3xl font-serif font-bold text-red-500 mb-4">Maaf, Belum Tersedia</h1>
-  //        <p className="text-gray-300 max-w-md leading-relaxed">
-  //          Pengalaman Web 3D ini membutuhkan keyboard dan mouse serta layar yang lebih besar untuk pengalaman terbaik.
-  //        </p>
-  //        <p className="mt-4 text-yellow-500 font-bold">
-  //           Silakan buka kembali di Laptop atau PC Desktop.
-  //        </p>
-  //     </div>
-  //   );
-  // }
+  if (isMobile) {
+    return (
+      <div className="fixed inset-0 bg-black z-[99999] flex flex-col items-center justify-center text-white p-8 text-center">
+         <div className="text-6xl mb-4">🎄</div>
+         <h1 className="text-3xl font-serif font-bold text-red-500 mb-4">Maaf, Belum Tersedia</h1>
+         <p className="text-gray-300 max-w-md leading-relaxed">
+           Pengalaman Web 3D ini membutuhkan keyboard dan mouse serta layar yang lebih besar untuk pengalaman terbaik.
+         </p>
+         <p className="mt-4 text-yellow-500 font-bold">
+            Silakan buka kembali di Laptop atau PC Desktop.
+         </p>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen w-full bg-black ">
@@ -354,10 +356,43 @@ const Main = () => {
       {cinematicMode && canExitCinematic && (
         <button
           onClick={() => setCinematicMode(false)}
-          className="fixed top-4 right-4 bg-red-500/80 hover:bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm z-50 transition-colors font-bold shadow-lg animate-in fade-in duration-500"
+          className="fixed top-20 right-6 bg-red-500/80 hover:bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm z-50 transition-colors font-bold shadow-lg animate-in fade-in duration-500"
         >
           ✕
         </button>
+      )}
+
+      {/* Volume Control */}
+      {!overlayOpen && !overlay3DOpen && (
+        <div className="fixed top-6 right-6 z-[60] flex items-center gap-3 bg-black/40 backdrop-blur-md p-2 pl-4 pr-3 rounded-full border border-white/10 hover:bg-black/60 transition-colors group animate-in fade-in slide-in-from-top-4 duration-700">
+           <div className="w-0 overflow-hidden group-hover:w-24 transition-all duration-300 ease-out flex items-center">
+             <input 
+                type="range" 
+                min="0" 
+                max="1" 
+                step="0.01" 
+                value={isMuted ? 0 : volume}
+                onChange={(e) => {
+                    setVolume(parseFloat(e.target.value));
+                    setIsMuted(false);
+                }}
+                className="w-20 h-1 bg-gray-500 rounded-lg appearance-none cursor-pointer accent-green-400 hover:accent-green-300"
+              />
+           </div>
+           <button 
+             onClick={() => setIsMuted(!isMuted)} 
+             className="text-white/80 hover:text-white transition-colors p-1"
+             title={isMuted ? "Unmute" : "Mute"}
+           >
+              {isMuted || volume === 0 ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+              ) : volume < 0.5 ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+              )}
+           </button>
+        </div>
       )}
 
       
@@ -524,7 +559,7 @@ const Main = () => {
           </Suspense>
           </ErrorBoundary>
 
-          {/* <Stats /> */}
+          <Stats />
         </Canvas>
       </KeyboardControls>
       
