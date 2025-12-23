@@ -559,7 +559,7 @@ const Main = () => {
           </Suspense>
           </ErrorBoundary>
 
-          <Stats />
+       
         </Canvas>
       </KeyboardControls>
       
@@ -725,7 +725,7 @@ const Main = () => {
           <LayoutBook />
         </div>
       )}
-      <audio ref={audioRef} src="/music/Ariana Grande - Santa Tell Me (Official Video).mp3" autoPlay loop />
+      <audio ref={audioRef} src="/music/bg_natal.mp3" autoPlay loop />
       <audio ref={cinematicAudioRef} src="/music/cinematic_bgm.mp3" loop />
     </div>
   );
