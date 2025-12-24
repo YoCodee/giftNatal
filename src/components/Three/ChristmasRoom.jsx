@@ -20,15 +20,13 @@ export function ChristmasRoom({
   const signpost = scene.getObjectByName("hut_small003_104");
   const battlepost = scene.getObjectByName("hut_mid_96");
 
-
-
   useEffect(() => {
     // Find named interactables in the scene and notify the parent via callback
     const found = [];
     const meta = {};
     // look for nodes that are named exactly 'Cube.078' or start with 'Cube.078',
     // or old name 'Cube.078_Material.025_0' to be tolerant of GLTF naming.
-     const namesToMatch = ["Cube078", "Object_6","asiap"];
+    const namesToMatch = ["Cube078", "Object_6", "asiap"];
 
     scene.traverse((o) => {
       if (!o || !o.name) return;
@@ -219,7 +217,7 @@ export function ChristmasRoom({
     stagePenumbra: { value: 0.4, min: 0, max: 1, step: 0.05 },
     stageDistance: { value: 30, min: 1, max: 200, step: 1 },
     stageDecay: { value: 2, min: 0, max: 5, step: 0.1 },
-    stageCastShadow: { value: true },
+    stageCastShadow: { value: false },
     showBeam: { value: true },
     beamOpacity: { value: 0.22, min: 0, max: 1, step: 0.01 },
   });
@@ -228,16 +226,28 @@ export function ChristmasRoom({
     fillLightIntensity,
     fillLightColor,
     fillLightPosition,
-    fillLightDistance
+    fillLightDistance,
   } = useControls("Room Fill Light", {
-    fillLightIntensity: { value: 46.4, min: 0, max: 100, step: 0.1, label: "Intensity" },
+    fillLightIntensity: {
+      value: 46.4,
+      min: 0,
+      max: 100,
+      step: 0.1,
+      label: "Intensity",
+    },
     fillLightColor: { value: "#c4dcff", label: "Color" },
     fillLightPosition: { value: [-5, 5, -5], step: 0.1, label: "Position" },
-    fillLightDistance: { value: 100, min: 1, max: 100, step: 1, label: "Distance" }
+    fillLightDistance: {
+      value: 100,
+      min: 1,
+      max: 100,
+      step: 1,
+      label: "Distance",
+    },
   });
 
   const { roomScale } = useControls("Christmas Room", {
-    roomScale: { value: 2, min: 0.1, max: 10, step: 0.1, label: "Scale" }
+    roomScale: { value: 2, min: 0.1, max: 10, step: 0.1, label: "Scale" },
   });
 
   const defaultPosition = [0, 0, 2];
@@ -246,54 +256,33 @@ export function ChristmasRoom({
   return (
     <>
       <RigidBody type="fixed" colliders="trimesh">
-         {/* Floor Collider to prevent falling since trimesh is disabled */}
-         <CuboidCollider args={[100, 0.5, 100]} position={[0, -0.5, 0]} />
-        <primitive 
-          object={scene} 
-          scale={roomScale} 
-          position={defaultPosition} 
+        {/* Floor Collider to prevent falling since trimesh is disabled */}
+        <CuboidCollider args={[100, 0.5, 100]} position={[0, -0.5, 0]} />
+        <primitive
+          object={scene}
+          scale={roomScale}
+          position={defaultPosition}
           rotation={defaultRotation}
         />
       </RigidBody>
-      
-      {/* Decorative warm lights */}
-      <Twinkle position={[1.5, 2.2, -1]} color="#ffd4a3" base={0.5} />
-      <Twinkle position={[-1, 2.0, -2]} color="#ffdeb5" base={0.4} />
-      <Twinkle position={[0.6, 1.1, -2.3]} color="#ffb77a" base={0.4} />
-      <Twinkle position={[2, 3, 2]} color="#ffb77a" base={0.5} />
 
-      {/* small point soft glow near gift */}
+
       <pointLight
-        position={[0, 1.1, -2.1]}
-        color="#ffecd4"
-        intensity={0.45}
-        distance={2.5}
+        position={fillLightPosition}
+        color={fillLightColor}
+        intensity={fillLightIntensity}
+        distance={fillLightDistance}
         decay={2}
       />
-      {/* gold sphere emissive light (will be pulsed in useFrame) */}
-      {/* additional warm fill to slightly brighten the room while keeping it cozy */}
-      <pointLight 
-        position={fillLightPosition} 
-        color={fillLightColor} 
-        intensity={fillLightIntensity} 
-        distance={fillLightDistance} 
-        decay={2} 
-      />
-      <pointLight
-        position={[0, 2.0, 0]}
-        color="#ffdfbe"
-        intensity={0.35}
-        distance={6}
-        decay={2}
-      />
-      {/* Ceiling lamp: warm orange point light with small bulb */}
+
+ 
       <pointLight
         position={mainLightPosition} // Menggunakan nilai dari Leva
         color={mainLightColor} // Menggunakan nilai dari Leva (color picker)
         intensity={mainLightIntensity} // Menggunakan nilai dari Leva (slider)
         distance={mainLightDistance} // Menggunakan nilai dari Leva (slider)
         decay={2}
-        castShadow
+        // castShadow (Disabled for performance on low-end devices)
       />
 
       {/* Stage Spotlight (user adjustable via Leva) */}
